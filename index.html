@@ -1,0 +1,1537 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayBox</title>
+    <link rel="icon" type="image/png" href="images/d26ae53c9441b24e4286842b32b98637.png" />
+   <meta name="description" content="PlayBox is a competitive survival game focused on strategy, dynamic exploration, and real-time combat. Manage limited resources, face constantly changing and hostile environments, and compete against other players in intense scenarios where every decision impacts your survival. Optimize your progress, adapt your playstyle, and prove your skills in a challenging and highly replayable experience.">
+
+    <meta property="og:title" content="PlayBox">
+    <meta property="og:description" content="PlayBox is a competitive survival game focused on strategy, dynamic exploration, and real-time combat. Manage limited resources, face constantly changing and hostile environments, and compete against other players in intense scenarios where every decision impacts your survival. Optimize your progress, adapt your playstyle, and prove your skills in a challenging and highly replayable experience.">
+    <meta property="og:image" type="image/png" href="images/d26ae53c9441b24e4286842b32b98637.png">
+    <meta property="og:url" content="https://playbox.com.es">
+    <meta property="og:type" content="website">
+
+    <meta name="theme-color" content="#bfe9ff">
+    <style>
+        :root {
+            --primary-color: #ff4d00;
+            --secondary-color: #000;
+            --accent-color: #00a2ff;
+            --dark-bg: #0a0a0a;
+            --light-text: #f0f0f0;
+            --gradient-bg: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', 'Orbitron', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            overflow-x: hidden;
+        }
+
+        /* Animación para todos los elementos interactivos */
+        button, .nav-item, .download-btn, .game-card, .news-item, .screenshot {
+            transition: all 0.3s ease;
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(255, 77, 0, 0.2);
+            border-radius: 50%;
+            border-top: 5px solid var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Header */
+        header {
+            background: var(--gradient-bg);
+            padding: 0.5rem 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 200px;
+            height: auto;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            position: relative;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            color: var(--light-text);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover::after {
+            width: 100%;
+        }
+
+        .language-toggle {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s ease;
+            margin-left: 20px; /* Adjusted margin as per previous request */
+        }
+
+        .language-toggle:hover {
+            background: #007bb5;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            padding-top: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: url("images/Pulse_Key_Art_02_Final02.jpg");
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--light-text);
+            text-shadow: 0 0 10px rgba(255, 77, 0, 0.7);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(255, 77, 0, 0.7);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(255, 77, 0, 0.9), 0 0 30px rgba(255, 77, 0, 0.7);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--light-text);
+        }
+
+        .download-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 77, 0, 0.7);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(255, 77, 0, 0.9);
+        }
+
+        /* Fixed: Changed the ::before hover effect for a smoother transition */
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0; /* Start at 0 */
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.15); /* Subtle white overlay */
+            opacity: 0; /* Starts invisible */
+            transition: opacity 0.3s ease; /* Transition opacity */
+            border-radius: 5px; /* Match button border-radius */
+            z-index: 0; /* Ensure it's behind the text if needed, though opacity handles it */
+        }
+
+        .download-btn:hover::before {
+            opacity: 1; /* Fades in */
+        }
+        /* End Fixed */
+
+        /* About Section */
+        .about {
+            padding: 5rem 2rem;
+            background: black;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--light-text);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+        }
+
+        .about-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            transform: scale(1);
+            transition: transform 0.5s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Features */
+        .features {
+            padding: 5rem 2rem;
+            background-color: #0c0c0c;
+        }
+
+          .features-container {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 2rem;
+    align-items: center;
+}
+
+          .feature-card {
+      background: rgba(20, 20, 20, 0.8);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      border-left: 3px solid var(--primary-color);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+      width: 100%;
+      max-width: 1150px;
+      min-height: 180px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+}
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--light-text);
+        }
+
+        .feature-desc {
+            font-size: 1rem;
+            color: #aaa;
+        }
+
+        /* Screenshots */
+        .screenshots {
+            padding: 5rem 2rem;
+            background: var(--gradient-bg);
+        }
+
+        .screenshots-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .screenshot {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .screenshot:hover {
+            transform: translateY(-10px);
+        }
+
+        .screenshot img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.5s ease;
+        }
+
+        .screenshot:hover img {
+            transform: scale(1.05);
+        }
+
+        .screenshot-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .screenshot:hover .screenshot-overlay {
+            opacity: 1;
+        }
+
+        .screenshot-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            padding: 5rem 2rem;
+            background-color: #0c0c0c;
+        }
+
+        .leaderboard-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .leaderboard-header {
+            background: var(--primary-color);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .leaderboard-title {
+            color: white;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .leaderboard-tabs {
+            display: flex;
+            background: #161616;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .leaderboard-table th {
+            background: #1a1a1a;
+            color: var(--light-text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .leaderboard-table tr:nth-child(even) {
+            background: #121212;
+        }
+
+        .leaderboard-table tr:hover {
+            background: #1e1e1e;
+        }
+
+        .rank {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .rank-1 {
+            color: gold;
+        }
+
+        .rank-2 {
+            color: silver;
+        }
+
+        .rank-3 {
+            color: #cd7f32; /* Bronze */
+        }
+
+        .player-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .player-score {
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        /* News Section */
+        .news {
+            padding: 5rem 2rem;
+            background: var(--gradient-bg);
+        }
+
+        .news-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .news-item {
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .news-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .news-content {
+            padding: 2rem;
+        }
+
+        .news-date {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--light-text);
+        }
+
+        .news-excerpt {
+            color: #ddd;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .read-more {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .read-more:hover {
+            background: #ff6a00;
+        }
+
+         /* MiniGame */
+        .minigame {
+            padding: 5rem 2rem;
+            background-color: #0c0c0c;
+        }
+
+        .minigame-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .minigame-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--light-text);
+        }
+
+        .game-canvas {
+            background: #000;
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 0 20px rgba(255, 77, 0, 0.5);
+            border-radius: 10px;
+            max-width: 100%;
+        }
+
+        .game-controls {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .game-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            margin: 0 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s ease;
+        }
+
+        .game-btn:hover {
+            background: #ff6a00;
+        }
+
+
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 3rem 2rem;
+            color: #aaa;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            width: 150px;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links h4 {
+            color: var(--light-text);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-links h4::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .newsletter input {
+            background: #1a1a1a;
+            border: none;
+            padding: 0.8rem;
+            width: 100%;
+            margin-bottom: 1rem;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .newsletter button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s ease;
+        }
+
+        .newsletter button:hover {
+            background: #ff6a00;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid #222;
+            color: #777;
+        }
+
+.nav-menu {
+    display: flex;
+    gap: 2rem;
+    align-items: center; 
+    }
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 1rem;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.nav-item {
+    white-space: nowrap;
+}
+
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-logo {
+                margin-bottom: 1rem;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image {
+                grid-row: 1;
+                margin-bottom: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-links h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate {
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        .delay-5 { animation-delay: 1s; }
+    </style>
+</head>
+<body>
+    <div id="preloader" style="opacity: 0; display: none;">
+        <div class="loader"></div>
+    </div>
+
+    <header>
+        <nav class="navbar">
+            <div class="nav-logo">
+                <svg class="logo" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#ff4d00"></stop>
+                            <stop offset="100%" stop-color="#00a2ff"></stop>
+                        </linearGradient>
+                    </defs>
+                    <image x="10" y="10" width="60" height="60" href="images/d26ae53c9441b24e4286842b32b98637.png"></image>
+                    <text x="90" y="60" font-family="Arial" font-weight="bold" font-size="38" fill="#fff">
+                        PLAYBOX
+                        <animate attributeName="opacity" values="0;1" dur="2s" fill="freeze"></animate>
+                    </text>
+                    <text x="250" y="40" font-family="Arial" font-size="12" fill="url(#logo-gradient)"></text>
+                </svg>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#hero" class="nav-item" data-i18n="navHome">Inicio</a></li>
+                <li><a href="#about" class="nav-item" data-i18n="navAbout">Acerca de</a></li>
+                <li><a href="#screenshots" class="nav-item" data-i18n="navScreenshots">Capturas</a></li>
+                <li><a href="#leaderboard" class="nav-item" data-i18n="navLeaderboard">Leaderboard</a></li>
+                <li><a href="#news" class="nav-item" data-i18n="navNews">Noticias</a></li>
+                <li><a href="#minigame" class="nav-item" data-i18n="navMinigame">MiniJuego</a></li>
+            </ul>
+            <button id="languageToggle" class="language-toggle">English</button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title animate" style="opacity: 1;">PLAYBOX</h1>
+            <p class="hero-subtitle animate delay-1" style="opacity: 1;" data-i18n="heroSubtitle">El último desafío competitivo rítmico</p>
+            <a href="https://www.dropbox.com/scl/fi/7vhggxlnatpzcmywsa6z5/PlayBox-Setup-2.2.1.exe?rlkey=14kf6j964s4cbhsp3q47ep6ke&st=8vd4ioqf&dl=1" class="download-btn animate delay-2" download="" style="opacity: 1;" data-i18n="downloadBtn">DESCARGAR AHORA</a>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <h2 class="section-title" data-i18n="aboutTitle">Acerca del Juego</h2>
+        <div class="about-content">
+            <div class="about-text animate" style="opacity: 1;">
+                <p data-i18n="aboutText1">Playbox es un juego de acción rítmica multijugador en el que los jugadores controlan a Thang, un joven rebelde que lucha por liberar su mundo de un sistema corporativo opresivo. Sincroniza cada golpe, salto y movimiento con la música para maximizar el daño y realizar combos espectaculares.</p>
+                <br>
+                <p data-i18n="aboutText2">Avanza por entornos vibrantes llenos de enemigos mecánicos, obstáculos dinámicos y recursos limitados mientras personalizas tus habilidades y armas. Cada partida ofrece una una experiencia única con nuevos poderes, aliados y desafíos cooperativos.</p>
+                <br>
+                <p data-i18n="aboutText3">Con un sistema de combate fluido que mezcla acción rápida y ritmo musical, podrás demostrar tu habilidad y competir en un mundo donde cada movimiento cuenta. ¿Tienes lo necesario para dominar el ritmo y destruir el sistema que controla el futuro?</p>
+            </div>
+            <div class="about-image animate delay-1" style="opacity: 1;">
+                <div class="about-image animate delay-1" style="opacity: 1;">
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); background: #000;">
+        <iframe 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+            src="https://www.youtube.com/embed/C_Py8oeQ7Gk?si=X-L6K8v_9vX8_9vX&rel=0&modestbranding=1&origin=https://playbox.gt.tc" 
+            title="Playbox Video" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+        </iframe>
+    </div>
+</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2 class="section-title" data-i18n="featuresTitle">Características</h2>
+        <div class="features-container">
+            <div class="feature-card animate" style="opacity: 1;">
+                <div class="feature-icon">⚔️</div>
+                <h3 class="feature-title" data-i18n="feature1Title">Acción Competitiva Rítmica</h3>
+                <p class="feature-desc" data-i18n="feature1Desc">Enfréntate a otros jugadores en combates frenéticos donde el ritmo es clave. Sincroniza tus movimientos con la música para maximizar tu efectividad y derrotar a tus oponentes en este desafío competitivo.</p>
+            </div>
+            <div class="feature-card animate delay-1" style="opacity: 1;">
+                <div class="feature-icon">🎮</div>
+                <h3 class="feature-title" data-i18n="feature2Title">Combate Dinámico</h3>
+                <p class="feature-desc" data-i18n="feature2Desc">Mezcla acción de alto octanaje con ritmos musicales. Combina tus ataques, movimientos y combos con la música para obtener ventaja en cada enfrentamiento.</p>
+            </div>
+            <div class="feature-card animate delay-2" style="opacity: 1;">
+                <div class="feature-icon">🌐</div>
+                <h3 class="feature-title" data-i18n="feature3Title">Mundo Interactivo</h3>
+                <p class="feature-desc" data-i18n="feature3Desc">Explora entornos llenos de obstáculos y enemigos que reaccionan a tu ritmo. Cada área está diseñada para que el flujo de la música cambie la dinámica de la batalla.</p>
+            </div>
+            <div class="feature-card animate delay-3" style="opacity: 1;">
+                <div class="feature-icon">🏆</div>
+                <h3 class="feature-title" data-i18n="feature4Title">Clasificación Global</h3>
+                <p class="feature-desc" data-i18n="feature4Desc">Compite por los primeros puestos en el ranking mundial, demostrando tu habilidad para sincronizarte con el ritmo y convertirte en un maestro del combate rítmico.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="screenshots" class="screenshots">
+        <h2 class="section-title" data-i18n="screenshotsTitle">Capturas de Pantalla</h2>
+        <div class="screenshots-container">
+            <div class="screenshot animate" style="opacity: 1;">
+                <img src="images/0baJnos.jpg" alt="Gameplay Screenshot 1">
+                <div class="screenshot-overlay">
+                    <button class="screenshot-btn" data-i18n="enlargeBtn">Ampliar</button>
+                </div>
+            </div>
+            <div class="screenshot animate delay-1" style="opacity: 1;">
+                <img src="images/7l14cQ8.jpg" alt="Gameplay Screenshot 2">
+                <div class="screenshot-overlay">
+                    <button class="screenshot-btn" data-i18n="enlargeBtn">Ampliar</button>
+                </div>
+            </div>
+            <div class="screenshot animate delay-2" style="opacity: 1;">
+                <img src="images/IadLXyE.jpg" alt="Gameplay Screenshot 3">
+                <div class="screenshot-overlay">
+                    <button class="screenshot-btn" data-i18n="enlargeBtn">Ampliar</button>
+                </div>
+            </div>
+            <div class="screenshot animate delay-3" style="opacity: 1;">
+                <img src="images/fZpQnrs.jpg" alt="Gameplay Screenshot 4">
+                <div class="screenshot-overlay">
+                    <button class="screenshot-btn" data-i18n="enlargeBtn">Ampliar</button>
+                </div>
+            </div>
+            <div class="screenshot animate delay-4" style="opacity: 1;">
+                <img src="images/9AmirM8.webp" alt="Gameplay Screenshot 5">
+                <div class="screenshot-overlay">
+                    <button class="screenshot-btn" data-i18n="enlargeBtn">Ampliar</button>
+                </div>
+            </div>
+            <div class="screenshot animate delay-5" style="opacity: 1;">
+                <img src="images/weeepisa.jpg" alt="Gameplay Screenshot 6">
+                <div class="screenshot-overlay">
+                    <button class="screenshot-btn" data-i18n="enlargeBtn">Ampliar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="leaderboard" class="leaderboard">
+        <h2 class="section-title" data-i18n="leaderboardTitle">Tabla de Clasificación</h2>
+        <div class="leaderboard-container animate" style="opacity: 1;">
+            <div class="leaderboard-header">
+                <h3 class="leaderboard-title" data-i18n="topPlayersTitle">TOP JUGADORES</h3>
+            </div>
+            <div class="leaderboard-tabs">
+                <div class="tab active" data-i18n="tabOverall">General</div>
+                <div class="tab" data-i18n="tabWeekly">Semanal</div>
+                <div class="tab" data-i18n="tabMonthly">Mensual</div>
+            </div>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="tableRank">Rango</th>
+                        <th data-i18n="tablePlayer">Jugador</th>
+                        <th data-i18n="tableWins">Victorias</th>
+                        <th data-i18n="tablePoints">Puntos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><div class="rank rank-1">1</div></td><td class="player-name"><img src="images/mTpOioz.png" class="player-avatar" alt="Avatar">scaru28</td><td>487</td><td class="player-score">125,842</td></tr>
+                    <tr><td><div class="rank rank-2">2</div></td><td class="player-name"><img src="images/monkiii.gif" class="player-avatar" alt="Avatar">changomeapodaron</td><td>431</td><td class="player-score">118,763</td></tr>
+                    <tr><td><div class="rank rank-3">3</div></td><td class="player-name"><img src="images/chapillo2.gif" class="player-avatar" alt="Avatar">chapillo02</td><td>402</td><td class="player-score">109,547</td></tr>
+                    <tr><td><div class="rank">4</div></td><td class="player-name"><img src="images/ismael-zambada.gif" class="player-avatar" alt="Avatar">gasxiii</td><td>378</td><td class="player-score">97,321</td></tr>
+                    <tr><td><div class="rank">5</div></td><td class="player-name"><img src="images/IGSWBso.png" class="player-avatar" alt="Avatar">fondatix</td><td>356</td><td class="player-score">92,146</td></tr>
+                    <tr><td><div class="rank">6</div></td><td class="player-name"><img src="images/belikiki.gif" class="player-avatar" alt="Avatar">belikiki</td><td>342</td><td class="player-score">88,529</td></tr>
+                    <tr><td><div class="rank">7</div></td><td class="player-name"><img src="images/mpCmXAZ.png" class="player-avatar" alt="Avatar">.pr0found</td><td>325</td><td class="player-score">85,712</td></tr>
+                    <tr><td><div class="rank">8</div></td><td class="player-name"><img src="images/mMsabF4.png" class="player-avatar" alt="Avatar">cecishhh</td><td>309</td><td class="player-score">82,194</td></tr>
+                    <tr><td><div class="rank">9</div></td><td class="player-name"><img src="images/koala.gif" class="player-avatar" alt="Avatar">MojarrinZambada</td><td>297</td><td class="player-score">79,853</td></tr>
+                    <tr><td><div class="rank">10</div></td><td class="player-name"><img src="images/pibblebeliko.gif" class="player-avatar" alt="Avatar">rampollas</td><td>281</td><td class="player-score">76,418</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+    <section id="news" class="news">
+        <h2 class="section-title" data-i18n="newsTitle">Noticias y Actualizaciones</h2>
+        <div class="news-container">
+            <div class="news-item animate" style="opacity: 1;">
+                <img src="images/R9f4shB.jpg" alt="Actualización de Temporada" class="news-image">
+                <div class="news-content">
+                    <div class="news-date" data-i18n="newsDate1">14 de Mayo, 2026</div>
+                    <h3 class="news-title" data-i18n="newsHeadline1">¡Nuevo Evento! ¡Ritmo Desafiante!</h3>
+                    <p class="news-excerpt" data-i18n="newsExcerpt1">Prepárate para un nuevo evento de temporada con misiones especiales y recompensas exclusivas. Participa en desafíos rítmicos únicos donde cada movimiento debe estar perfectamente sincronizado con la música para obtener recompensas increíbles. ¡No te lo pierdas!</p>
+                    <a href="https://playbox.lol/#" class="read-more" data-i18n="readMoreBtn">Leer más</a>
+                </div>
+            </div>
+            <div class="news-item animate delay-1" style="opacity: 1;">
+                <img src="images/2i1f0zN.jpg" alt="Nuevo Modo de Juego" class="news-image">
+                <div class="news-content">
+                    <div class="news-date" data-i18n="newsDate2">5 de Mayo, 2026</div>
+                    <h3 class="news-title" data-i18n="newsHeadline2">Nuevo Modo: Asedio Melódico</h3>
+                    <p class="news-excerpt" data-i18n="newsExcerpt2">Enfréntate a un nuevo modo de juego donde deberás defender una base rítmica mientras las olas de enemigos intentan destruirla. A medida que avanza el tiempo, el ritmo se intensifica, ¡y solo los más sincronizados podrán sobrevivir!</p>
+                    <a href="https://playbox.lol/#" class="read-more" data-i18n="readMoreBtn">Leer más</a>
+                </div>
+            </div>
+            <div class="news-item animate delay-2" style="opacity: 1;">
+                <img src="images/jupAyf0.jpg" alt="Torneo Mundial" class="news-image">
+                <div class="news-content">
+                    <div class="news-date" data-i18n="newsDate3">28 de Abril, 2026</div>
+                    <h3 class="news-title" data-i18n="newsHeadline3">Torneo Mundial de Playbox</h3>
+                    <p class="news-excerpt" data-i18n="newsExcerpt3">¡Inscríbete en el primer torneo mundial y demuestra tu destreza al ritmo de la música! Los mejores jugadores del mundo competirán por trofeos exclusivos, personalizaciones especiales para su personaje y el título de Campeón Global de Playbox. ¿Tienes lo necesario para ser el mejor?</p>
+                    <a href="https://playbox.lol/#" class="read-more" data-i18n="readMoreBtn">Leer más</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="minigame" class="minigame">
+        <h2 class="section-title" data-i18n="minigameSectionTitle">Mini Juego</h2>
+        <div class="minigame-container">
+            <h3 class="minigame-title animate" style="opacity: 1;" data-i18n="minigameTitle">Sobreviviente Pixel</h3>
+            <canvas id="gameCanvas" class="game-canvas animate delay-1" width="600" height="400" style="opacity: 1;"></canvas>
+            <div class="game-controls animate delay-2" style="opacity: 1;">
+                <button id="startBtn" class="game-btn" data-i18n="startGameBtn">Iniciar Juego</button>
+                <button id="resetBtn" class="game-btn" data-i18n="resetGameBtn">Reiniciar</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <svg class="footer-logo" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+                    <image x="10" y="10" width="60" height="60" href="images/d26ae53c9441b24e4286842b32b98637.png"></image>
+                    <text x="80" y="50" font-family="Arial" font-weight="bold" font-size="38" fill="#fff">Playbox</text>
+                </svg>
+                <p data-i18n="footerAboutText">El definitivo juego de supervivencia competitivo multijugador. Únete a millones de jugadores en todo el mundo.</p>
+            </div>
+            <div class="footer-links">
+                <h4 data-i18n="footerLinksTitle">Enlaces</h4>
+                <ul>
+                    <li><a href="#hero" data-i18n="navHome">Inicio</a></li>
+                    <li><a href="#about" data-i18n="navAbout">Acerca de</a></li>
+                    <li><a href="#screenshots" data-i18n="navScreenshots">Capturas</a></li>
+                    <li><a href="#leaderboard" data-i18n="navLeaderboard">Leaderboard</a></li>
+                    <li><a href="#news" data-i18n="navNews">Noticias</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4 data-i18n="footerSupportTitle">Soporte</h4>
+                <ul>
+                    <li><a href="#" data-i18n="supportHelp">Ayuda</a></li>
+                    <li><a href="#" data-i18n="supportFAQ">FAQ</a></li>
+                    <li><a href="#" data-i18n="supportContact">Contacto</a></li>
+                    <li><a href="#" data-i18n="supportBugReport">Reportar Bug</a></li>
+                    <li><a href="#" data-i18n="supportPrivacyPolicy">Política de Privacidad</a></li>
+                </ul>
+            </div>
+            <div class="newsletter">
+                <h4 data-i18n="newsletterTitle">Suscríbete</h4>
+                <p data-i18n="newsletterDesc">Recibe las últimas noticias y actualizaciones</p>
+                <input type="email" placeholder="Tu correo electrónico" data-i18n="emailPlaceholder">
+                <button data-i18n="subscribeBtn">Suscribirse</button>
+            </div>
+        </div>
+        <div class="copyright">
+            <p data-i18n="copyrightText">© 2026 Playbox Game. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Language translations
+        const translations = {
+            es: {
+                pageTitle: 'Playbox - Supervivencia Competitiva',
+                navHome: 'Inicio',
+                navAbout: 'Acerca de',
+                navScreenshots: 'Capturas',
+                navLeaderboard: 'Leaderboard',
+                navNews: 'Noticias',
+                navMinigame: 'MiniJuego',
+                heroSubtitle: 'El último desafío competitivo rítmico',
+                downloadBtn: 'DESCARGAR AHORA',
+                aboutTitle: 'Acerca del Juego',
+                aboutText1: 'Playbox es un juego de acción rítmica multijugador en el que los jugadores controlan a Thang, un joven rebelde que lucha por liberar su mundo de un sistema corporativo opresivo. Sincroniza cada golpe, salto y movimiento con la música para maximizar el daño y realizar combos espectaculares.',
+                aboutText2: 'Avanza por entornos vibrantes llenos de enemigos mecánicos, obstáculos dinámicos y recursos limitados mientras personalizas tus habilidades y armas. Cada partida ofrece una experiencia única con nuevos poderes, aliados y desafíos cooperativos.',
+                aboutText3: 'Con un sistema de combate fluido que mezcla acción rápida y ritmo musical, podrás demostrar tu habilidad y competir en un mundo donde cada movimiento cuenta. ¿Tienes lo necesario para dominar el ritmo y destruir el sistema que controla el futuro?',
+                videoNotSupported: 'Tu navegador no soporta el video.',
+                featuresTitle: 'Características',
+                feature1Title: 'Acción Competitiva Rítmica',
+                feature1Desc: 'Enfréntate a otros jugadores en combates frenéticos donde el ritmo es clave. Sincroniza tus movimientos con la música para maximizar tu efectividad y derrotar a tus oponentes en este desafío competitivo.',
+                feature2Title: 'Combate Dinámico',
+                feature2Desc: 'Mezcla acción de alto octanaje con ritmos musicales. Combina tus ataques, movimientos y combos con la música para obtener ventaja en cada enfrentamiento.',
+                feature3Title: 'Mundo Interactivo',
+                feature3Desc: 'Explora entornos llenos de obstáculos y enemigos que reaccionan a tu ritmo. Cada área está diseñada para que el flujo de la música cambie la dinámica de la batalla.',
+                feature4Title: 'Clasificación Global',
+                feature4Desc: 'Compite por los primeros puestos en el ranking mundial, demostrando tu habilidad para sincronizarte con el ritmo y convertirte en un maestro del combate rítmico.',
+                screenshotsTitle: 'Capturas de Pantalla',
+                enlargeBtn: 'Ampliar',
+                leaderboardTitle: 'Tabla de Clasificación',
+                topPlayersTitle: 'TOP JUGADORES',
+                tabOverall: 'General',
+                tabWeekly: 'Semanal',
+                tabMonthly: 'Mensual',
+                tableRank: 'Rango',
+                tablePlayer: 'Jugador',
+                tableWins: 'Victorias',
+                tablePoints: 'Puntos',
+                newsTitle: 'Noticias y Actualizaciones',
+                newsDate1: '14 de Mayo, 2026',
+                newsHeadline1: '¡Nuevo Evento! ¡Ritmo Desafiante!',
+                newsExcerpt1: 'Prepárate para un nuevo evento de temporada con misiones especiales y recompensas exclusivas. Participa en desafíos rítmicos únicos donde cada movimiento debe estar perfectamente sincronizado con la música para obtener recompensas increíbles. ¡No te lo pierdas!',
+                readMoreBtn: 'Leer más',
+                newsDate2: '5 de Mayo, 2026',
+                newsHeadline2: 'Nuevo Modo: Asedio Melódico',
+                newsExcerpt2: 'Enfréntate a un nuevo modo de juego donde deberás defender una base rítmica mientras las olas de enemigos intentan destruirla. A medida que avanza el tiempo, el ritmo se intensifica, ¡y solo los más sincronizados podrán sobrevivir!',
+                newsDate3: '28 de Abril, 2026',
+                newsHeadline3: 'Torneo Mundial de Playbox',
+                newsExcerpt3: '¡Inscríbete en el primer torneo mundial y demuestra tu destreza al ritmo de la música! Los mejores jugadores del mundo competirán por trofeos exclusivos, personalizaciones especiales para su personaje y el título de Campeón Global de Playbox. ¿Tienes lo necesario para ser el mejor?',
+                minigameSectionTitle: 'Mini Juego',
+                minigameTitle: 'Sobreviviente Pixel',
+                startGameBtn: 'Iniciar Juego',
+                resetGameBtn: 'Reiniciar',
+                gameOverMsg: '¡GAME OVER!',
+                finalScoreMsg: 'Puntuación Final: ',
+                restartPromptMsg: 'Presiona "Reiniciar" para jugar de nuevo',
+                moveInstructions: 'Muévete con las flechas ← → o A/D',
+                avoidBlocks: 'Evita los bloques azules para sobrevivir',
+                pressStart: 'Presiona "Iniciar Juego" para comenzar',
+                scoreDisplay: 'Puntuación: ',
+                footerAboutText: 'El definitivo juego de supervivencia competitivo multijugador. Únete a millones de jugadores en todo el mundo.',
+                footerLinksTitle: 'Enlaces',
+                footerSupportTitle: 'Soporte',
+                supportHelp: 'Ayuda',
+                supportFAQ: 'FAQ',
+                supportContact: 'Contacto',
+                supportBugReport: 'Reportar Bug',
+                supportPrivacyPolicy: 'Política de Privacidad',
+                newsletterTitle: 'Suscríbete',
+                newsletterDesc: 'Recibe las últimas noticias y actualizaciones',
+                emailPlaceholder: 'Tu correo electrónico',
+                subscribeBtn: 'Suscribirse',
+                copyrightText: '© 2026 Playbox Game. Todos los derechos reservados.'
+            },
+            en: {
+                pageTitle: 'Playbox - Competitive Survival',
+                navHome: 'Home',
+                navAbout: 'About',
+                navScreenshots: 'Screenshots',
+                navLeaderboard: 'Leaderboard',
+                navNews: 'News',
+                navMinigame: 'Mini-Game',
+                heroSubtitle: 'The Ultimate Rhythmic Competitive Challenge',
+                downloadBtn: 'DOWNLOAD NOW',
+                aboutTitle: 'About the Game',
+                aboutText1: 'Playbox is a multiplayer rhythmic action game where players control Thang, a young rebel fighting to free his world from an oppressive corporate system. Synchronize every hit, jump, and movement with the music to maximize damage and perform spectacular combos.',
+                aboutText2: 'Advance through vibrant environments filled with mechanical enemies, dynamic obstacles, and limited resources while customizing your abilities and weapons. Each match offers a unique experience with new powers, allies, and cooperative challenges.',
+                aboutText3: 'With a fluid combat system that blends fast-paced action and musical rhythm, you can demonstrate your skill and compete in a world where every move counts. Do you have what it takes to master the rhythm and destroy the system that controls the future?',
+                videoNotSupported: 'Your browser does not support the video.',
+                featuresTitle: 'Features',
+                feature1Title: 'Rhythmic Competitive Action',
+                feature1Desc: 'Face off against other players in frantic battles where rhythm is key. Synchronize your movements with the music to maximize your effectiveness and defeat your opponents in this competitive challenge.',
+                feature2Title: 'Dynamic Combat',
+                feature2Desc: 'Blend high-octane action with musical rhythms. Combine your attacks, movements, and combos with the music to gain an advantage in every encounter.',
+                feature3Title: 'Interactive World',
+                feature3Desc: 'Explore environments filled with obstacles and enemies that react to your rhythm. Each area is designed for the flow of music to change the dynamics of battle.',
+                feature4Title: 'Global Ranking',
+                feature4Desc: 'Compite por los primeros puestos en el ranking mundial, demostrando tu habilidad para sincronizarte con el ritmo y convertirte en un maestro del combate rítmico.',
+                screenshotsTitle: 'Capturas de Pantalla',
+                enlargeBtn: 'Enlarge',
+                leaderboardTitle: 'Leaderboard',
+                topPlayersTitle: 'TOP PLAYERS',
+                tabOverall: 'Overall',
+                tabWeekly: 'Weekly',
+                tabMonthly: 'Monthly',
+                tableRank: 'Rank',
+                tablePlayer: 'Player',
+                tableWins: 'Wins',
+                tablePoints: 'Points',
+                newsTitle: 'News & Updates',
+                newsDate1: 'May 14, 2026',
+                newsHeadline1: 'New Event! Rhythmic Challenge!',
+                newsExcerpt1: 'Get ready for a new seasonal event with special missions and exclusive rewards. Participate in unique rhythmic challenges where every move must be perfectly synchronized with the music to earn incredible rewards. Don\'t miss out!',
+                readMoreBtn: 'Read more',
+                newsDate2: 'May 5, 2026',
+                newsHeadline2: 'New Mode: Melodic Siege',
+                newsExcerpt2: 'Face a new game mode where you must defend a rhythmic base while waves of enemies try to destroy it. As time progresses, the rhythm intensifies, and only the most synchronized will survive!',
+                newsDate3: 'April 28, 2026',
+                newsHeadline3: 'Playbox World Tournament',
+                newsExcerpt3: 'Sign up for the first world tournament and prove your rhythm mastery! The best players in the world will compete for exclusive trophies, personalizations special for their character and the title of Playbox Global Champion. Do you have what it takes to be the best?',
+                minigameSectionTitle: 'Mini-Game',
+                minigameTitle: 'Pixel Survivor',
+                startGameBtn: 'Start Game',
+                resetGameBtn: 'Reiniciar',
+                gameOverMsg: '¡GAME OVER!',
+                finalScoreMsg: 'Puntuación Final: ',
+                restartPromptMsg: 'Presiona "Reiniciar" para jugar de nuevo',
+                moveInstructions: 'Muévete con las flechas ← → o A/D',
+                avoidBlocks: 'Evita los bloques azules para sobrevivir',
+                pressStart: 'Presiona "Iniciar Juego" para comenzar',
+                scoreDisplay: 'Puntuación: ',
+                footerAboutText: 'The ultimate competitive multiplayer survival game. Join millions of players worldwide.',
+                footerLinksTitle: 'Links',
+                footerSupportTitle: 'Support',
+                supportHelp: 'Help',
+                supportFAQ: 'FAQ',
+                supportContact: 'Contact',
+                supportBugReport: 'Report Bug',
+                supportPrivacyPolicy: 'Privacy Policy',
+                newsletterTitle: 'Subscribe',
+                newsletterDesc: 'Get the latest news and updates',
+                emailPlaceholder: 'Your email address',
+                subscribeBtn: 'Subscribe',
+                copyrightText: '© 2026 Playbox Game. All rights reserved.'
+            }
+        };
+
+        let currentLanguage = 'en'; // Default language
+
+        // Function to apply translations
+        function applyTranslations() {
+            document.documentElement.lang = currentLanguage;
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLanguage][key]) {
+                    if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+                        element.setAttribute('placeholder', translations[currentLanguage][key]);
+                    } else {
+                        element.textContent = translations[currentLanguage][key];
+                    }
+                }
+            });
+            updateLanguageButton();
+            // Re-draw minigame elements to reflect language change
+            if (gameRunning) {
+                // If game is running, just update score display
+                const canvas = document.getElementById('gameCanvas');
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#fff';
+                ctx.font = '20px Arial';
+                ctx.fillText(translations[currentLanguage].scoreDisplay + gameScore, 10, 30);
+            } else {
+                // If game is not running, draw start screen or game over screen
+                const canvas = document.getElementById('gameCanvas');
+                const ctx = canvas.getContext('2d');
+                if (gameScore > 0) { // Assuming game over state if score is not zero
+                    drawGameOver(ctx, canvas, gameScore);
+                } else {
+                    drawStartScreen(ctx, canvas);
+                }
+            }
+        }
+
+        // Function to update the language toggle button text
+        function updateLanguageButton() {
+            const langToggleBtn = document.getElementById('languageToggle');
+            if (currentLanguage === 'es') {
+                langToggleBtn.textContent = 'English';
+            } else {
+                langToggleBtn.textContent = 'Español';
+            }
+        }
+
+        // Function to toggle language
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
+            applyTranslations();
+        }
+
+        // Preloader
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('preloader').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('preloader').style.display = 'none';
+                }, 500);
+            }, 1000);
+            applyTranslations(); // Apply translations after preloader hides
+        });
+
+        // Scroll Animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.animate');
+
+            function checkIfInView() {
+                animatedElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.style.opacity = '1';
+                    }
+                });
+            }
+
+            // Run once on load
+            checkIfInView();
+
+            // Run on scroll
+            window.addEventListener('scroll', checkIfInView);
+
+            // Add event listener for language toggle button
+            document.getElementById('languageToggle').addEventListener('click', toggleLanguage);
+        });
+
+        // Leaderboard Tabs
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+
+        // Mini Game
+        let gameRunning = false;
+        let gameScore = 0;
+        let player = {};
+        let enemies = [];
+        let leftPressed = false;
+        let rightPressed = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Player
+            player = {
+                x: canvas.width / 2,
+                y: canvas.height - 50,
+                width: 30,
+                height: 30,
+                speed: 5,
+                color: '#ff4d00'
+            };
+
+            // Enemies
+            const enemySize = 20;
+            const enemySpeed = 2;
+            const enemySpawnRate = 30;
+            let enemyCounter = 0;
+
+            // Event Listeners
+            document.addEventListener('keydown', keyDownHandler);
+            document.addEventListener('keyup', keyUpHandler);
+            document.getElementById('startBtn').addEventListener('click', startGame);
+            document.getElementById('resetBtn').addEventListener('click', resetGame);
+
+            // Touch Controls
+            canvas.addEventListener('touchstart', function(e) {
+                const touchX = e.touches[0].clientX;
+                const canvasRect = canvas.getBoundingClientRect();
+                if (touchX < canvasRect.width / 2) {
+                    leftPressed = true;
+                    rightPressed = false;
+                } else {
+                    rightPressed = true;
+                    leftPressed = false;
+                }
+            });
+
+            canvas.addEventListener('touchend', function() {
+                leftPressed = false;
+                rightPressed = false;
+            });
+
+            // Key Handlers
+            function keyDownHandler(e) {
+                if (e.key === 'ArrowLeft' || e.key === 'a') {
+                    leftPressed = true;
+                } else if (e.key === 'ArrowRight' || e.key === 'd') {
+                    rightPressed = true;
+                }
+            }
+
+            function keyUpHandler(e) {
+                if (e.key === 'ArrowLeft' || e.key === 'a') {
+                    leftPressed = false;
+                } else if (e.key === 'ArrowRight' || e.key === 'd') {
+                    rightPressed = false;
+                }
+            }
+
+            // Game Functions
+            function startGame() {
+                if (!gameRunning) {
+                    gameRunning = true;
+                    gameLoop();
+                }
+            }
+
+            function resetGame() {
+                gameRunning = false;
+                gameScore = 0;
+                enemies = [];
+                player.x = canvas.width / 2;
+                player.y = canvas.height - 50;
+                drawStartScreen(ctx, canvas);
+            }
+
+            function gameLoop() {
+                if (!gameRunning) return;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Move player
+                if (leftPressed && player.x > 0) {
+                    player.x -= player.speed;
+                } else if (rightPressed && player.x < canvas.width - player.width) {
+                    player.x += player.speed;
+                }
+
+                // Spawn enemies
+                enemyCounter++;
+                if (enemyCounter >= enemySpawnRate) {
+                    const enemy = {
+                        x: Math.random() * (canvas.width - enemySize),
+                        y: -enemySize,
+                        width: enemySize,
+                        height: enemySize,
+                        speed: enemySpeed + Math.random() * 2
+                    };
+                    enemies.push(enemy);
+                    enemyCounter = 0;
+                }
+
+                // Move and draw enemies
+                for (let i = 0; i < enemies.length; i++) {
+                    enemies[i].y += enemies[i].speed;
+
+                    // Check collision
+                    if (
+                        player.x < enemies[i].x + enemies[i].width &&
+                        player.x + player.width > enemies[i].x &&
+                        player.y < enemies[i].y + enemies[i].height &&
+                        player.y + player.height > enemies[i].y
+                    ) {
+                        gameOver(ctx, canvas, gameScore);
+                        return;
+                    }
+
+                    // Remove enemies that go off screen
+                    if (enemies[i].y > canvas.height) {
+                        enemies.splice(i, 1);
+                        i--;
+                        gameScore++;
+                    } else {
+                        // Draw enemy
+                        ctx.fillStyle = '#00a2ff';
+                        ctx.fillRect(enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height);
+                    }
+                }
+
+                // Draw player
+                ctx.fillStyle = player.color;
+                ctx.fillRect(player.x, player.y, player.width, player.height);
+
+                // Draw score
+                ctx.fillStyle = '#fff';
+                ctx.font = '20px Arial';
+                ctx.fillText(translations[currentLanguage].scoreDisplay + gameScore, 10, 30);
+
+                requestAnimationFrame(gameLoop);
+            }
+
+            function gameOver(ctx, canvas, score) {
+                gameRunning = false;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#ff4d00';
+                ctx.font = '30px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(translations[currentLanguage].gameOverMsg, canvas.width / 2, canvas.height / 2 - 30);
+
+                ctx.fillStyle = '#fff';
+                ctx.font = '20px Arial';
+                ctx.fillText(translations[currentLanguage].finalScoreMsg + score, canvas.width / 2, canvas.height / 2 + 10);
+                ctx.fillText(translations[currentLanguage].restartPromptMsg, canvas.width / 2, canvas.height / 2 + 50);
+            }
+
+            function drawStartScreen(ctx, canvas) {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#ff4d00';
+                ctx.font = '30px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(translations[currentLanguage].minigameTitle, canvas.width / 2, canvas.height / 2 - 50);
+
+                ctx.fillStyle = '#fff';
+                ctx.font = '18px Arial';
+                ctx.fillText(translations[currentLanguage].moveInstructions, canvas.width / 2, canvas.height / 2);
+                ctx.fillText(translations[currentLanguage].avoidBlocks, canvas.width / 2, canvas.height / 2 + 30);
+                ctx.fillText(translations[currentLanguage].pressStart, canvas.width / 2, canvas.height / 2 + 70);
+            }
+
+            // Initial draw
+            drawStartScreen(ctx, canvas);
+        });
+    </script>
+
+
+</body></html>
