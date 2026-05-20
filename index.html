@@ -835,6 +835,21 @@
         .delay-5 { animation-delay: 1s; }
     </style>
 </head>
+    <div id="imageModal" class="image-modal">
+    <span class="close-modal" onclick="closeImage()">&times;</span>
+    <img id="modalImage">
+</div>
+
+<script>
+function openImage(src) {
+    document.getElementById("imageModal").style.display = "flex";
+    document.getElementById("modalImage").src = src;
+}
+
+function closeImage() {
+    document.getElementById("imageModal").style.display = "none";
+}
+</script>
 <body>
     <div id="preloader" style="opacity: 0; display: none;">
         <div class="loader"></div>
